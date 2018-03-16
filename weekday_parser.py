@@ -15,7 +15,10 @@ class WeekdayParser:
 
     def __init__(self, root):
         for path in glob.glob(os.path.join(root, self.CSV_TYPES)):
-            self.output(os.path.basename(path), self.process_data(pandas.read_csv(path)))
+            try:
+                self.output(os.path.basename(path), self.process_data(pandas.read_csv(path)))
+            except ValueError as err:
+                self.output(os.path.basename(path), "Unable to successfully parse file.  See details:\n{}".format(err))
 
     def process_data(self, data):
         weekdays = []

@@ -31,6 +31,12 @@ class TestWeekdayParser(unittest.TestCase):
         self.assertEqual(len(results), 5)
 
     @mock.patch('weekday_parser.WeekdayParser.__init__')
+    def test_process_missing_value(self, initial):
+        initial.return_value = None
+        with self.assertRaises(ValueError):
+            WeekdayParser("").process_data(DataFrame({"mon-fri": '', "description": "first_desc"}, index=[0]))
+
+    @mock.patch('weekday_parser.WeekdayParser.__init__')
     @mock.patch('weekday_parser.WeekdayParser.DAY_NAMES', ['a', 'b', 'c'])
     @mock.patch('weekday_parser.WeekdayParser.DAY_INDEX', {'a': 0, 'b': 1, 'c': 2})
     def test_day_range(self, initial):
